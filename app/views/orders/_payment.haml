@@ -1,0 +1,10 @@
+.payment
+  = f.fields_for :payments,payment,child_index:payment.object_id do |ff|
+    回款金额：
+    = ff.text_field :money
+    &nbsp;
+    回款日期
+    = ff.text_field :pay_date,class:'datepicker',value:ff.object.pay_date.try(:strftime,'%Y-%m-%d')
+    &nbsp;
+    = ff.hidden_field :_destroy
+    = link_to_function '删除','delete_order_payment(this)'

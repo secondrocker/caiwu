@@ -1,0 +1,12 @@
+%div.sale
+  = f.fields_for :subscriptions_sales,ss,child_index:ss.object_id do |ff|
+    销售员：
+    = ff.select :sale_id,Sale.all.map{|x| [x.full_name,x.id]}
+    比例：
+    = ff.text_field :rate
+    \%
+    是否销售主任:
+    = ff.check_box :primary_sale,onclick:"change_primary_sale(this)"
+    = ff.hidden_field :_destroy
+    &nbsp;
+    = link_to_function '删除','delete_sub_sale(this)'

@@ -1,0 +1,18 @@
+.team_title
+  .show_team{id:"show_team_#{team.id}"}
+    .leader_div
+      = team.leader.full_name
+    .leader_level_div
+      = team.level_text
+    .leader_level_div
+      = team.leader_type_text
+    .sales_div
+      = team.sales.map(&:full_name).join(',')
+    .opt_div
+      .edit_btn_div
+        = link_to '编辑',show_edit_team_sales_path(team.id),remote:true,method: :post
+        &nbsp;
+        = link_to '删除',delete_team_path(team.id),remote:true,method: :delete
+      .save_btn_div{style:'display:none'}
+        = button_to_function '取消',"cancel_edit_team_sales(#{team.id},'#{team.sales.map(&:full_name).join(',')}')"
+        = button_to_function '保存',"save_team_sales(#{team.id})"

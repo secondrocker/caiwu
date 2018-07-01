@@ -1,0 +1,32 @@
+= form_for sale,remote:true do |f|
+  %table
+    %tr
+      %th 姓名
+      %td
+        = f.text_field :name
+    %tr
+      %th 别名
+      %td
+        = f.text_field :alias_name
+    %tr
+      %th 级别
+      %td
+        = f.select :level,Sale::LEVELS.map{|k,v|[v,k]},{}, onchange: "change_level(this)"
+    %tr.leader_type{style: "#{@sale.leader? ? '' : 'display:none' }"}
+      %th 类型
+      %td
+        = f.select :leader_type,Sale::LEADER_TYPES.map{|k,v|[v,k]}
+    %tr
+      %td
+        = f.submit '提交'
+      %td
+        %input{type:'button',onclick:"$('#brow_edit_sale').remove();",value:'取消'}
+
+:javascript
+  function change_level(obj){
+    if($(obj).val() == 'leader'){
+      $(obj).parents('#edit_sale').find('.leader_type').show();
+    }else{
+      $(obj).parents('#edit_sale').find('.leader_type').val('').hide();
+    }
+  }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Caiwu</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="heads_div" >
+      <div class="<%= request.path == sales_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '销售员列表',sales_path %>
+      </div><div class="<%= request.path == team_sets_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '团队设置列表',team_sets_path %>
+      </div><div class="<%= request.path == report_settings_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '月度设置',report_settings_path %>
+      </div><div class="<%= request.path == subscriptions_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '认购列表',subscriptions_path %>
+      </div><div class="<%= request.path == orders_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '签约列表',orders_path %>
+      </div><div class="<%= request.path == sub_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '套数统计',sub_report_path %>
+      </div><div class="<%= request.path == sub_price_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '签约额统计',sub_price_report_path %>
+      </div><div class="<%= request.path == sale_pay_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '销售员提成统计',sale_pay_report_path %>
+      </div><div class="<%= request.path == leader_pay_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '主管提成统计',leader_pay_report_path %>
+      </div><div class="<%= request.path == manager_pay_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '经理提成统计',manager_pay_report_path %>
+      </div><div class="<%= request.path == director_pay_report_path ? 'selected_title' :'normal_title'%>">
+        <%= link_to '总监提成统计',director_pay_report_path %>
+      </div>
+    </div>
+    <%= yield %>
+  </body>
+</html>

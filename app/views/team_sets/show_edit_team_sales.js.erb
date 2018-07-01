@@ -1,0 +1,4 @@
+$("#show_team_<%= @team.id %>").find('.edit_btn_div').hide();
+$("#show_team_<%= @team.id %>").find('.save_btn_div').show();
+$("#show_team_<%= @team.id %>").find('.sales_div').html("<%= j(render partial:'team_sets/partial/edit_team_sales',
+locals:{team:@team}) %>");

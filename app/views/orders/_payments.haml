@@ -1,0 +1,8 @@
+.order_payments
+  = form_for order,url:save_order_payments_path(order.id),remote:true do |f|
+    .payments
+      - order.payments.each do |payment|
+        = render partial:'orders/payment',locals:{f:f,payment:payment}
+    .new_payment
+      = link_to_new_payment '新增回款',f
+    = submit_tag '保存'

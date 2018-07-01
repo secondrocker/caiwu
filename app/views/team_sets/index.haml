@@ -1,0 +1,60 @@
+:css
+  .team_title,.show,.edit,.new{
+    width:620px;
+    display:block;
+  }
+  .col_div{
+    width:150px;
+    display:inline-block;
+  }
+  .opt_div{
+    width:300px;
+    display:inline-block;
+  }
+%h3 团队设置列表
+%hr
+%div
+  %div
+    .team_title
+      .col_div 开始时间
+      .col_div 结束时间
+      .opt_div 操作
+    - @team_sets.each do |team_set|
+      .show{id:"show_#{team_set.id}"}
+        .col_div
+          = team_set.start_time.strftime('%Y-%m-%d')
+        .col_div
+          = team_set.end_time.strftime('%Y-%m-%d')
+        .opt_div
+          = link_to '删除',team_set,method: :delete,remote:true,data:{confirm: '确认删除?'}
+          = link_to_function '编辑',"btn_edit(#{team_set.id})"
+          = link_to '复制设置',"/team_sets/#{team_set.id}/clone_team_set",method: :post,remote:true
+          = link_to '设置团队下属',"/team_sets/#{team_set.id}/team_sales",target:'_blank'
+      .edit{style: 'display:none;',id:"edit_#{team_set.id}"}
+        = form_tag team_set_path(team_set),remote:true,method: :put do
+          .col_div
+            = text_field_tag 'team_set[start_time]',team_set.start_time.strftime('%Y-%m-%d'),id:"ts_s_time_#{team_set.id}",class:'datepicker'
+          .col_div
+            = text_field_tag 'team_set[end_time]',team_set.end_time.strftime('%Y-%m-%d'),id:"ts_e_time_#{team_set.id}",class:'datepicker'
+          .opt_div
+            = button_to_function '取消',"btn_cancel_edit(#{team_set.id})"
+            = submit_tag '保存'
+    .new
+      = form_tag team_sets_path,remote:true do
+        .col_div
+          = text_field_tag 'team_set[start_time]','',class:'datepicker'
+        .col_div
+          = text_field_tag 'team_set[end_time]','',class:'datepicker'
+        .opt_div
+          = submit_tag '创建'
+  = will_paginate @team_sets
+:javascript
+  function btn_edit(id){
+    $("#show_"+id.toString()).hide();
+    $("#edit_"+id.toString()).show();
+  }
+
+  function btn_cancel_edit(id){
+    $("#show_"+id.toString()).show();
+    $("#edit_"+id.toString()).hide();
+  }

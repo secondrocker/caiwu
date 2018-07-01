@@ -1,0 +1,55 @@
+%h3 月度设置
+%div
+  = form_tag({},method: :get) do
+    年：
+    = select_tag :year,options_for_select((2017..Time.now.year).to_a.reverse.map{|x| ["#{x}年",x]},@year)
+    &nbsp;
+    月：
+    = select_tag :month,options_for_select((1..12).to_a.map{|x| ["#{x}月",x]},@month)
+    = submit_tag '查询'
+    = link_to '复制上月设置',copy_last_month_set_path("#{@year}-#{@month}"),remote:true,method: :post,data:{confirm: '确认复制?此操作会清除当前页设置!'}
+%hr
+%div
+  = form_tag save_report_setting_path,remote:true do
+    %table
+      %tr
+        %td
+          = hidden_field_tag :id,@setting.id
+          = hidden_field_tag 'set[year]',@year
+          = hidden_field_tag 'set[month]',@month
+          销售员套数>=
+          = text_field_tag 'set[sale][cover_num]',@setting.sets[:sale].blank? ? '' : @setting.sets[:sale][:cover_num]
+          按照
+          = text_field_tag 'set[sale][rebate_max]',@setting.sets[:sale].blank? ? '' : @setting.sets[:sale][:rebate_max]
+          \%提成，否则按照
+          = text_field_tag 'set[sale][rebate_min]',@setting.sets[:sale].blank? ? '' : @setting.sets[:sale][:rebate_min]
+          \%
+      %tr
+        %td
+          新主管完成任务量按照
+          = text_field_tag 'set[new_leader][rebate_max]',@setting.sets[:new_leader].blank? ? '' : @setting.sets[:new_leader][:rebate_max]
+          \%，未完成按照
+          = text_field_tag 'set[new_leader][rebate_rate]',@setting.sets[:new_leader].blank? ? '' : @setting.sets[:new_leader][:rebate_rate]
+          \%计算
+      %tr
+        %td
+          老主管完成任务量按照
+          = text_field_tag 'set[old_leader][rebate_max]',@setting.sets[:old_leader].blank? ? '' : @setting.sets[:old_leader][:rebate_max]
+          \%，未完成按照
+          = text_field_tag 'set[old_leader][rebate_rate]',@setting.sets[:old_leader].blank? ? '' : @setting.sets[:old_leader][:rebate_rate]
+          \%计算
+      %tr
+        %td
+          经理完成任务量按照
+          = text_field_tag 'set[manager][rebate_max]',@setting.sets[:manager].blank? ? '' : @setting.sets[:manager][:rebate_max]
+          \%，未完成按照
+          = text_field_tag 'set[manager][rebate_rate]',@setting.sets[:manager].blank? ? '' : @setting.sets[:manager][:rebate_rate]
+          \%计算
+      - @setting.sets[:leaders].to_a.each do |leader|
+        = render partial:'report_settings/leader_requirment',locals:{leader:leader}
+      %tr.new_leader
+        %td{style:'padding-left:5px;'}
+          = link_to '新增主管任务',new_leader_requirment_path,remote:true,method: :post
+      %tr
+        %td{style:'padding-left:10px;'}
+          = submit_tag '保存'

@@ -1,0 +1,91 @@
+= form_for order do |f|
+  %table
+    %tr
+      %th 客户姓名
+      %td
+        = f.text_field :customer_name
+      %th 客户电话
+      %td
+        = f.text_field :customer_phone
+    %tr
+      %th 成交来源
+      %td
+        =f.text_field :deal_source
+      %th 项目名称
+      %td
+        =f.text_field :project_name
+    %tr
+      %th 认购日期
+      %td
+        = order.subscription.blank? ? '' : order.subscription.sub_date.try(:strftime,'%Y-%m-%d')
+      %th 签约日期
+      %td
+        = f.text_field :sub_date,class:'datepicker',value:f.object.sub_date.try(:strftime,'%Y-%m-%d')
+    %tr
+      %th 客户类型
+      %td
+        = f.select :customer_type,[['A类',0],['B类',1]]
+      %th 结佣标准
+      %td
+        =f.text_field  :commision_price
+    %tr
+      %th 优惠金额
+      %td
+        = f.text_field :reduce_price
+      %th 已扣优惠
+      %td
+        = f.text_field :reduced_price
+    %tr
+      %th 未扣优惠
+      %td
+        = f.text_field :no_reduced_price
+      %th 应收佣金
+      %td{colspan:3}
+        = f.text_field :amout_price
+    %tr.sales
+      %td{colspan:4}
+        - order.orders_sales.each do |os|
+          = render partial:'orders/order_sale',locals:{os:os,f:f}
+        %div.add_new
+          = link_to_new_os '新增销售员',f
+    %tr
+      %th 备注
+      %td{colspan:3}
+        = f.text_area :remark,style:'width:300px;height:40px;'
+    %tr
+      %td{colspan:4}
+        &nbsp;&nbsp;
+        = submit_tag '保存'
+:javascript
+  $(function(){
+    $('.add_fields').bind('click',function(event){
+      var time = (new Date()).getTime()
+      var regexp = new RegExp($(this).data('id'), 'g')
+      $(this).parent('.add_new').before($(this).data('fields').replace(regexp, time))
+      event.preventDefault()
+    });
+    $('.add_to_order').bind('click',function(event){
+      var time = (new Date()).getTime()
+      var regexp = new RegExp($(this).data('id'), 'g')
+      $(this).parent('.new_payment').prev('.payments').append($(this).data('fields').replace(regexp, time))
+      event.preventDefault();
+      fillDatepicker();
+    });
+  });
+
+  function delete_sub_sale(obj){
+    $(obj).prev('input[type=hidden]').val('1')
+    $(obj).parent('.sale').hide();
+  }
+
+  function delete_order_payment(obj){
+    $(obj).prev('input[type=hidden]').val('1')
+    $(obj).parent('.payment').hide();
+  }
+
+  function change_primary_sale(obj){
+    if($(obj).is(':checked')){
+      $(obj).parents('.sales').find('input:checkbox').attr('checked',false);
+      $(obj).prop('checked',true);
+    }
+  }

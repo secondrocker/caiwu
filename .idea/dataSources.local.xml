@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="Rails caiwu: default" uuid="0f965713-5790-4cd8-a951-0d2ce25df8da">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <first-sync>true</first-sync>
+      <user-name>root</user-name>
+    </data-source>
+    <data-source name="Rails caiwu: production" uuid="fb510b74-c392-409c-8f81-2fdcf0ef476d">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <user-name>root</user-name>
+    </data-source>
+    <data-source name="Rails caiwu: test" uuid="cb0b0996-c0c7-4d25-b009-2a7ed20ffcbd">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <user-name>root</user-name>
+    </data-source>
+    <data-source name="Rails caiwu: development" uuid="29204109-7a1a-43dd-8b93-069c05fc9f10">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <user-name>root</user-name>
+    </data-source>
+  </component>
+</project>

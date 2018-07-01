@@ -1,0 +1,40 @@
+%h3 签约列表
+%hr
+%div
+  = link_to '新增签约',new_order_path,target:"_blank"
+%table.border-table
+  %tr
+    %th 认购
+    %th 客户姓名
+    %th 项目名称
+    %th 认购日期
+    %th 签约日期
+    %th 结佣标准
+    %th 应收佣金
+    %th 优惠金额
+    %th 已扣金额
+    %th 未扣金额
+    %th 销售主任
+    %th 分单主任
+    %th 已回款
+    %th 操作
+  - @orders.each do |order|
+    %tr
+      %td
+        = link_to '相关认购',edit_subscription_path(order.subscription_id) if order.subscription_id.present?
+      %td= order.customer_name
+      %td= order.project_name
+      %td= order.subscription.blank? ? '' : order.subscription.sub_date.strftime('%Y-%m-%d')
+      %td= order.sub_date.strftime('%Y-%m-%d')
+      %td= order.commision_price
+      %td= order.amout_price
+      %td= order.reduce_price
+      %td= order.reduced_price
+      %td= order.no_reduced_price
+      %td= order.primary_sale.try(:full_name)
+      %td= order.other_sales.map(&:full_name).join(',')
+      %td= order.payments.map(&:money).sum
+      %td
+        = link_to '编辑',edit_order_path(order),target:'_blank'
+        = link_to '删除',order,remote:true,method: :delete,data:{confirm:'确定删除?'}
+= will_paginate @subs

@@ -1,0 +1,89 @@
+:css
+  .team_title{
+    width:720px;
+    display:block;
+    border-bottom:1px solid gray;
+  }
+
+  .show_team,.edit_team,.new_team{
+    width:800px;
+    display:block;
+  }
+  .leader_div{
+    width:150px;
+    display:inline-block;
+  }
+  .leader_level_div{
+    width:70px;
+    display:inline-block;
+  }
+  .sales_div{
+    width:350px;
+    display:inline-block;
+  }
+  .opt_div{
+    width:100px;
+    display:inline-block;
+  }
+  .left_team_sales{
+    width:240px;
+    display:inline-block;
+  }
+  .right_team_sales{
+    width:100px;
+    display:inline-block;
+  }
+%h3
+  = "#{@team_set.start_time.strftime('%Y-%m-%d %H:%M:%S')}-#{@team_set.start_time.strftime('%Y-%m-%d %H:%M:%S')} 团队设置"
+%div
+  .team_title
+    .leader_div 领导
+    .leader_level_div 级别
+    .leader_level_div 主管类型
+    .sales_div 直属下属
+    .opt_div 操作
+  - @team_set.teams.each do |team|
+    = render partial: 'team_sets/partial/show_team',locals:{team:team}
+  = render partial:'team_sets/partial/new_team',locals:{new_team:@team_set.teams.build}
+:javascript
+  function choose_sales_to_team(id){
+    var team_div = $("#show_team_"+id.toString());
+    var sales_ids = team_div.find('select').val();
+    if( !sales_ids ||sales_ids.length == 0){
+      alert('请选择!');
+      return;
+    }
+    for(var i=0;i< sales_ids.length;i++){
+      var sale_id = sales_ids[i].toString();
+      team_div.find('.left_team_sales').append('<span sale_id="'+sale_id+'"><span>'+
+        team_div.find('select').find('option[value='+sale_id+']').html()+
+        '</span><a href="javascript:delete_sale_from_team('+sale_id+','+id.toString()+')">x</a></span>');
+      team_div.find('select').find('option[value='+sale_id+']').remove();
+    }
+
+  }
+
+  function delete_sale_from_team(id,team_id){
+    var team_div = $("#show_team_"+team_id.toString());
+    var sale_span = team_div.find('span[sale_id='+id.toString()+']');
+    team_div.find('select').append('<option value ="'+id.toString()+'">'+sale_span.find('span').html()+'</a>')
+    sale_span.remove();
+  }
+
+  function save_team_sales(team_id){
+    var sales_ids = $("#show_team_"+team_id.toString()).find('.left_team_sales').find('span').map(function(){return $(this).attr('sale_id')});
+    $.post('/team_sets/save_team_sales',{team_id:team_id,sales_ids:sales_ids.toArray()},function(json){
+      if(json.success){
+        alert(json.info);
+        location.reload();
+      }
+    });
+  }
+
+  function cancel_edit_team_sales(team_id,sales_names){
+    var team_div = $("#show_team_"+team_id.toString());
+    team_div.find('.sales_div').html(sales_names);
+    team_div.find('.edit_btn_div').show();
+    team_div.find('.save_btn_div').hide();
+  }
+

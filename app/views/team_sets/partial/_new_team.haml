@@ -1,0 +1,11 @@
+.new_team
+  = form_for new_team,url:create_team_path(new_team.team_set_id),method: :post,remote:true do |f|
+    .leader_div
+      = f.select :leader_id,[['请选择',nil]]+new_team.team_set.left_team_leaders_options
+    .leader_level_div
+      = f.select :level,Team::LEVELS.map{|k,v|[v,k]}
+    .leader_level_div
+      = f.select :leader_type,Team::LEADER_TYPES.map{|k,v|[v,k]}
+    .sales_div
+    .opt_div
+      = submit_tag '创建'

@@ -1,0 +1,76 @@
+= form_for sub do |f|
+  %table
+    %tr
+      %th 客户姓名
+      %td
+        = f.text_field :customer_name
+      %th 客户电话
+      %td
+        = f.text_field :customer_phone
+    %tr
+      %th 成交来源
+      %td
+        =f.text_field :deal_source
+      %th 项目名称
+      %td
+        =f.text_field :project_name
+    %tr
+      %th 认购日期
+      %td
+        = f.text_field :sub_date,class:'datepicker'
+      %th 客户类型
+      %td
+        = f.select :customer_type,[['A类',0],['B类',1]]
+    %tr
+      %th 结佣标准
+      %td
+        =f.text_field  :commision_price
+      %th 优惠金额
+      %td
+        = f.text_field :reduce_price
+    %tr
+      %th 已扣优惠
+      %td
+        = f.text_field :reduced_price
+      %th 未扣优惠
+      %td
+        = f.text_field :no_reduced_price
+    %tr
+      %th 应收佣金
+      %td
+        = f.text_field :amout_price
+    %tr.sales
+      %td{colspan:4}
+        - sub.subscriptions_sales.each do |ss|
+          = render partial:'subscriptions/subscription_sale',locals:{ss:ss,f:f}
+        %div.add_new
+          = link_to_new_ss '新增销售员',f
+    %tr
+      %th 备注
+      %td{colspan:3}
+        = f.text_area :remark,style:'width:300px;height:40px;'
+    %tr
+      %td{colspan:4}
+        &nbsp;&nbsp;
+        = submit_tag '保存'
+:javascript
+  $(function(){
+    $('.add_fields').bind('click',function(event){
+      var time = (new Date()).getTime()
+      var regexp = new RegExp($(this).data('id'), 'g')
+      $(this).before($(this).data('fields').replace(regexp, time))
+      event.preventDefault()
+    });
+  });
+
+  function delete_sub_sale(obj){
+    $(obj).prev('input[type=hidden]').val('1')
+    $(obj).parent('.sale').hide();
+  }
+
+  function change_primary_sale(obj){
+    if($(obj).is(':checked')){
+      $(obj).parents('.sales').find('input:checkbox').attr('checked',false);
+      $(obj).prop('checked',true);
+    }
+  }

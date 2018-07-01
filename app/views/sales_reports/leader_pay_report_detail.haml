@@ -1,0 +1,32 @@
+%h3= "主管#{@sale.full_name}提成明细"
+%hr
+%div
+  = link_to '导出',request.url+'?export=1',target:'_blank'
+%div
+  %table.border-table
+    %tr
+      %th 销售员
+      %th 分单员
+      %th 客户姓名
+      %th 认购日期
+      %th 签约日期
+      %th 实际提成
+      %th 提点
+      %th 套数
+      %th 个人提成
+      %th 主管提点
+      %th 主管工资
+    - @details.each do |detail|
+      %tr
+        %td= detail[:name]
+        %td= detail[:other_name]
+        %td= detail[:customer_name]
+        %td= detail[:sub_date].try(:strftime,'%Y-%m-%d')
+        %td= detail[:order_date].try(:strftime,'%Y-%m-%d')
+        %td= detail[:daiti_money].to_f.round(4)
+        %td= detail[:rate].to_f.round(4)
+        %td= detail[:tao].to_f.round(4)
+        %td= detail[:ti_money].to_f.round(4)
+        %td= detail[:leader_ti_rate].to_f.round(4)
+        %td= detail[:leader_ti_money].to_f.round(4)
+  = will_paginate @details unless @details.blank?

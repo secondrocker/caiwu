@@ -1,0 +1,48 @@
+%h3 销售员列表
+%div
+  %div
+    = link_to '新增销售员',"javascript:brow_edit_sale()"
+  %table.border-table
+    %tr
+      %th 姓名
+      %th 别名
+      %th 职务
+      %th 主管类型
+      %th 创建时间
+      %th 操作
+    - @sales.each do |sale|
+      %tr
+        %td= sale.name
+        %td= sale.alias_name
+        %td= sale.level_text
+        %td= sale.leader_type_text
+        %td= sale.created_at.strftime('%Y-%m-%d')
+        %td
+          = link_to '删除',sale,method: :delete,remote:true,data:{confirm: '确认删除?'}
+          &nbsp;
+          = link_to '修改',"javascript:brow_edit_sale(#{sale.id})"
+  = will_paginate @sales
+
+:javascript
+  function brow_edit_sale(sale_id){
+    var url = '';
+    if(!sale_id || sale_id == undefined || sale_id.toString() == ''){
+      url = "/sales/new";
+    }else{
+      url = "/sales/"+sale_id.toString()+"/edit";
+    }
+    if($("#brow_edit_sale").length == 0){
+      var ele = document.createElement('div');
+      ele.setAttribute('id','brow_edit_sale');
+      document.body.appendChild(ele)
+    }
+    $("#brow_edit_sale").dialog({
+      height: 219,
+      width: 327,
+      modal: true,
+      title: '修改/新增销售员',
+      autoOpen:true
+    });
+    $("#brow_edit_sale").load(url);
+
+  }

@@ -1,0 +1,8 @@
+%tr.leader
+  %td
+    = select_tag 'set[leaders][][leader_id]',options_for_select(Sale.leader_sales,leader[:leader_id])
+    &nbsp;
+    任务量：
+    = text_field_tag 'set[leaders][][requirment]',leader[:requirment]
+    万元&nbsp;
+    = link_to_function 'x',"$(this).parents('.leader').remove();",style:'color:red'

@@ -1,0 +1,6 @@
+.left_team_sales
+  - team.sales.each do |sale|
+    = render partial:'team_sets/partial/single_team_sale',locals:{sale:sale,team:team}
+.right_team_sales
+  = link_to_function '<<',"choose_sales_to_team(#{team.id})"
+  = select_tag 'left_sales',options_for_select(team.left_sales_options),multiple:true

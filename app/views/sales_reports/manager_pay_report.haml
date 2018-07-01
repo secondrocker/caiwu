@@ -1,0 +1,24 @@
+%h3 经理提成统计
+%div
+  %div
+    = form_tag({},method: :get) do
+      年：
+      = select_tag :year,options_for_select((2016..Time.now.year).to_a.map{|x|[x,x]},params[:year].to_i)
+      月：
+      = select_tag :month,options_for_select((1..12).to_a.map{|x|[x,x]},params[:month].to_i)
+      &nbsp;
+      = submit_tag '查询'
+%hr
+  %table.border-table
+    %tr
+      %th 经理
+      %th 提成
+    - @sales.each do |sale_hash|
+      %tr
+        %td= sale_hash[:name]
+        %td
+          - if sale_hash[:money].to_f == 0
+            = sale_hash[:money].to_f.round(4)
+          - else
+            = link_to sale_hash[:money].to_f.round(4),manager_pay_report_detail_path(@sr.id,sale_hash[:manager_id]),target:'_blank'
+  = will_paginate @sales unless @sales.blank?

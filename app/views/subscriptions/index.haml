@@ -1,0 +1,37 @@
+%h3 认购列表
+%hr
+%div
+  = link_to '新增认购',new_subscription_path,target:"_blank"
+%table.border-table
+  %tr
+    %th 客户姓名
+    %th 项目名称
+    %th 认购日期
+    %th 结佣标准
+    %th 应收佣金
+    %th 优惠金额
+    %th 已扣金额
+    %th 未扣金额
+    %th 销售主任
+    %th 分单主任
+    %th 操作
+  - @subs.each do |sub|
+    %tr
+      %td= sub.customer_name
+      %td= sub.project_name
+      %td= sub.sub_date.strftime('%Y-%m-%d')
+      %td= sub.commision_price
+      %td= sub.amout_price
+      %td= sub.reduce_price
+      %td= sub.reduced_price
+      %td= sub.no_reduced_price
+      %td= sub.primary_sale.try(:full_name)
+      %td= sub.other_sales.map(&:full_name).join(',')
+      %td
+        = link_to '编辑',edit_subscription_path(sub),target:'_blank'
+        = link_to '删除',sub,remote:true,method: :delete,data:{confirm:'确定删除?'}
+        - if sub.order.present?
+          = link_to '相关签单',edit_order_path(sub.order)
+        - else
+          = link_to '生成签单',generate_order_path(sub.id),remote:true,method: :post
+= will_paginate @subs

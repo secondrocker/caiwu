@@ -1,0 +1,4 @@
+%span{sale_id:sale.id}
+  %span
+    = sale.full_name
+  = link_to_function 'x',"delete_sale_from_team(#{sale.id},#{team.id})"
